@@ -29,6 +29,11 @@
 
   <artifactId>clustered-map-integration-tests</artifactId>
 
+  <properties>
+    <kitUnzipLocation>${project.build.directory}/kit</kitUnzipLocation>
+    <kitInstallationPath>${kitUnzipLocation}/terracotta-5.0.3-beta</kitInstallationPath>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.terracotta.entities</groupId>
@@ -45,6 +50,11 @@
       <artifactId>passthrough-server</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.terracotta</groupId>
+      <artifactId>galvan-support</artifactId>
+      <version>1.0.3-beta</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
@@ -53,5 +63,34 @@
       <artifactId>hamcrest-all</artifactId>
     </dependency>
   </dependencies>
+
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-dependency-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>unpack</id>
+          <phase>integration-test</phase>
+          <goals>
+            <goal>unpack</goal>
+          </goals>
+          <configuration>
+            <artifactItems>
+              <artifactItem>
+                <groupId>org.terracotta.internal</groupId>
+                <artifactId>terracotta-kit</artifactId>
+                <version>5.0.3-beta</version>
+                <type>zip</type>
+                <outputDirectory>${project.build.directory}/kit</outputDirectory>
+              </artifactItem>
+            </artifactItems>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
+</build>
 
 </project>
