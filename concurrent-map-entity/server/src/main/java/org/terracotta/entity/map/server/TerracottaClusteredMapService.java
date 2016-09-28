@@ -31,6 +31,9 @@ import org.terracotta.entity.map.common.MapResponse;
  * TerracottaClusteredMapService
  */
 public class TerracottaClusteredMapService implements EntityServerService<MapOperation, MapResponse> {
+
+  private static final int DEFAULT_CONCURRENCY = 1024;
+
   @Override
   public long getVersion() {
     return ConcurrentClusteredMap.VERSION;
@@ -53,7 +56,7 @@ public class TerracottaClusteredMapService implements EntityServerService<MapOpe
 
   @Override
   public ConcurrencyStrategy<MapOperation> getConcurrencyStrategy(byte[] configuration) {
-    return new ActiveTerracottaClusteredMap.MapConcurrencyStrategy();
+    return new ActiveTerracottaClusteredMap.MapConcurrencyStrategy(DEFAULT_CONCURRENCY);
   }
 
   @Override

@@ -19,7 +19,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class ConditionalRemoveOperation implements MapOperation {
+public class ConditionalRemoveOperation implements KeyBasedMapOperation {
   private final Object key;
   private final Object value;
 
@@ -28,6 +28,7 @@ public class ConditionalRemoveOperation implements MapOperation {
     this.value = value;
   }
 
+  @Override
   public Object getKey() {
     return key;
   }
