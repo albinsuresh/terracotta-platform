@@ -20,10 +20,12 @@ import org.terracotta.entity.ClientDescriptor;
 import org.terracotta.entity.ConcurrencyStrategy;
 import org.terracotta.entity.PassiveSynchronizationChannel;
 import org.terracotta.entity.ServiceRegistry;
+import org.terracotta.entity.map.common.KeyBasedMapOperation;
 import org.terracotta.entity.map.common.MapOperation;
 import org.terracotta.entity.map.common.MapResponse;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -55,20 +57,36 @@ class ActiveTerracottaClusteredMap extends AbstractClusteredMap implements Activ
 
   public static class MapConcurrencyStrategy implements ConcurrencyStrategy<MapOperation> {
 
+    private final int bucketCount;
+
+    public MapConcurrencyStrategy(int bucketCount) {
+      this.bucketCount = bucketCount;
+    }
+
     @Override
     public int concurrencyKey(MapOperation operation) {
+      if (operation instanceof KeyBasedMapOperation) {
+        KeyBasedMapOperation keyBasedMapOperation = (KeyBasedMapOperation) operation;
+        return (CONCURRENCY_KEY + Math.abs(keyBasedMapOperation.getKey().hashCode() % bucketCount));
+      }
+
       return CONCURRENCY_KEY;
     }
 
     @Override
     public Set<Integer> getKeysForSynchronization() {
-      return Collections.singleton(CONCURRENCY_KEY);
+      Set<Integer> result = new HashSet<Integer>();
+      for (int i = 0; i < bucketCount; i++ ) {
+        result.add(CONCURRENCY_KEY + i);
+      }
+
+      return Collections.unmodifiableSet(result);
     }
   }
 
   @Override
   public void synchronizeKeyToPassive(PassiveSynchronizationChannel<MapOperation> syncChannel, int concurrencyKey) {
-    if (concurrencyKey != CONCURRENCY_KEY) {
+    if (concurrencyKey < CONCURRENCY_KEY) {
       throw new IllegalArgumentException("concurrencyKey should only be " + CONCURRENCY_KEY);
     }
 

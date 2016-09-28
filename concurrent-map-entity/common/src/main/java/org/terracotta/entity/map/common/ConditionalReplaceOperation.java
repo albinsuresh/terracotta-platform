@@ -19,7 +19,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class ConditionalReplaceOperation implements MapOperation {
+public class ConditionalReplaceOperation implements KeyBasedMapOperation {
   private final Object key;
   private final Object oldValue;
   private final Object newValue;
@@ -30,6 +30,7 @@ public class ConditionalReplaceOperation implements MapOperation {
     this.newValue = newValue;
   }
 
+  @Override
   public Object getKey() {
     return key;
   }

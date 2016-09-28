@@ -19,13 +19,14 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class GetOperation implements MapOperation {
+public class GetOperation implements KeyBasedMapOperation {
   private final Object key;
 
   public GetOperation(Object key) {
     this.key = key;
   }
 
+  @Override
   public Object getKey() {
     return key;
   }

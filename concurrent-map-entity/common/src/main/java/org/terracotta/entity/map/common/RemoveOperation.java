@@ -19,13 +19,14 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class RemoveOperation implements MapOperation {
+public class RemoveOperation implements KeyBasedMapOperation {
   private final Object key;
 
   public RemoveOperation(Object key) {
     this.key = key;
   }
 
+  @Override
   public Object getKey() {
     return key;
   }

@@ -19,7 +19,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class PutIfPresentOperation implements MapOperation {
+public class PutIfPresentOperation implements KeyBasedMapOperation {
   private final Object key;
   private final Object value;
 
@@ -28,6 +28,7 @@ public class PutIfPresentOperation implements MapOperation {
     this.value = value;
   }
 
+  @Override
   public Object getKey() {
     return key;
   }
